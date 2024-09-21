@@ -1,6 +1,6 @@
 ![Bsides Logo 2024 Logo](bsides_ct_logo.png "BSides Logo")
 
-# DevSecOps and Securing your SDLC
+# DevSecOps and Securing your SDLC 
 
 This repository contains training materials for workshops on DevSecOps and Securing your Software Development Lifecycle (SDLC).
 
