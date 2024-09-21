@@ -64,7 +64,6 @@ Once installed, SonarLint will highlight issues in your code, such as hardcoded 
 
 Pre-commit hooks run scripts before code is committed to the repository, helping to prevent security vulnerabilities from being added.
 
-### Talisman
 ### Talisman 
 
 The next tool we will look at is Talisman which can be used to setup pre-commit hooks to aid in security. 
