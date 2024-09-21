@@ -23,7 +23,7 @@ jobs:
           horusec start -p . -D -o="json" -O="./horusec-results.json"
     
       - name: Upload Horusec Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: horusec-results
           path: horusec-results.json
