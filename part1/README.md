@@ -65,22 +65,99 @@ Once installed, SonarLint will highlight issues in your code, such as hardcoded 
 Pre-commit hooks run scripts before code is committed to the repository, helping to prevent security vulnerabilities from being added.
 
 ### Talisman
+### Talisman 
 
-Talisman is a pre-commit hook that prevents secrets (e.g., API keys, passwords) from being committed to the repository.
+The next tool we will look at is Talisman which can be used to setup pre-commit hooks to aid in security. 
 
-1. Install Talisman in your Codespace:
-   ```bash
-   bash -c "$(curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/main/install.sh)"
-   ```
+You can find it at the following GitHub repository:
 
-2. Add a pre-commit hook to your repository:
-   ```bash
-   echo "talisman -g pre-commit" >> .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
-   ```
+https://github.com/thoughtworks/talisman
 
-3. Configure Talisman to ignore false positives using a `.talismanrc` file.
+Talisman is capable of scanning git changesets to ensure secrets and other sensitive information is
+not added to the repository. This includes not only AWS API Keys, but SSH keys, tokens, passwords and similar.
 
-Talisman will scan for sensitive information and prevent it from being committed.
+Install in the code space by entering:
+
+```console
+bash -c "$(curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/main/install.sh)"
+```
+
+Open up the `README` file in the GitHub repository and follow the installation steps for your OS.
+
+Once installed we can configure a stand alone pre-commit hook for our repository.
+
+Run the following command:
+
+```console
+echo "talisman -g pre-commit" >> .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+```
+
+The pre-commit hook will now act as a blocker to commiting secrets to the code base.
+
+We can ignore false positives using the `.talismanrc` file. You can see an example in the root of this project. 
+
+Here we have told it to ignore the `README` file, since it contains words that trigger a false positive.
+
+```console
+Talisman Scan: 3 / 3 <-----------------------------------------------------------------------------------------------------------------------------------------------------------> 100.00%  
+
+Talisman Report:
++-----------------+--------------------------------+----------+
+|      FILE       |             ERRORS             | SEVERITY |
++-----------------+--------------------------------+----------+
+| part1/README.md | Potential secret pattern :     | low      |
+|                 | not added to the repository.   |          |
+|                 | This includes not only AWS API |          |
+|                 | Keys, but SSH keys, tokens,    |          |
+|                 | passwords and similar.         |          |
++-----------------+--------------------------------+----------+
+
+
+If you are absolutely sure that you want to ignore the above files from talisman detectors, consider pasting the following format in .talismanrc file in the project root
+
+fileignoreconfig:
+- filename: part1/README.md
+  checksum: 7bc8a740923be465f9f54f83fef533d0e93fa2b978350fc006d2094f2d47741d
+version: ""
+
+```
+
+We can also ignore low severity findings, by adding the following line to our .talismanrc
+
+```YAML
+
+threshold: medium
+
+```
+
+Of course, this introduces the risk that true positives could be added to the code base. 
+
+Talisman can also be run as a command line tool. This will scan the target directory for secrets and output a JSON file with a list of findings.
+
+To run a scan you can type:
+
+```console
+
+talisman -s
+
+``` 
+
+The output will be added to:
+
+```console
+
+talisman_report/talisman_reports/data
+
+```
+
+Give this a try and navigate to the folder. Open the JSON file in your IDE to examine it. 
+
+We've seen a couple of methods to catch secrets from being commited to the repository. We can also prevent whole files being added. 
+
+Much as we saw with the `.talismanrc` file where we could configure talisman to ignore false positives, we can use a `.` file to prevent whole file types being commited to git.
+
+To do this, we use the `.gitignore` file. Our next task will be to demonstrate how they work.
+
 
 ## Module 3: Preventing Accidental Commits
 
